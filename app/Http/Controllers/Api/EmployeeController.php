@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\DefaultResource;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -74,16 +75,30 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-        //
+        try {
+            $data = $request->validated();
+
+            $employee->update($data);
+
+            return response(new DefaultResource(true, 'Successfully updated employee', []), 200);
+        } catch (\Throwable $e) {
+            return response(new DefaultResource(false, $e->getMessage(), []), 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Employee $employee)
     {
-        //
+        try {
+            $employee->delete();
+
+            return response(new DefaultResource(true, 'Successfully deleted employee', []), 200);
+        } catch (\Throwable $e) {
+            return response(new DefaultResource(false, $e->getMessage(), []), 500);
+        }
     }
 }
