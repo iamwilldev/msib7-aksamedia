@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Resources\DefaultResource;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -49,9 +50,17 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
-        //
+        try {
+            $data = $request->validated();
+
+            $employee = Employee::create($data);
+
+            return response(new DefaultResource(true, 'Successfully created employee', []), 201);
+        } catch (\Throwable $e) {
+            return response(new DefaultResource(false, $e->getMessage(), []), 500);
+        }
     }
 
     /**
