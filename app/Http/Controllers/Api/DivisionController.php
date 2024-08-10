@@ -9,25 +9,59 @@ use Illuminate\Http\Request;
 
 class DivisionController extends Controller
 {
-    public function show(Request $request)
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
     {
         try {
+            $query = Division::query();
+
             if ($request->has('name')) {
-                $divisions = Division::whereLike('name', $request->name)->select('id', 'name')->get();
-
-                return response(new DefaultResource(true, 'Successfully fetched divisions', [
-                    'divisions' => $divisions,
-                ]), 200);
-            } else {
-                $divisions = Division::select('id', 'name')->paginate(2);
-
-                return (new DefaultResource(true, 'Successfully fetched divisions', $divisions->items(),
-                ))->additional([
-                    'pagination' => $divisions->toArray(),
-                ])->response()->setStatusCode(200);
+                $query->whereLike('name', $request->name);
             }
+
+            $divisions = $query->select('id', 'name')->paginate(2);
+
+            return (new DefaultResource(true, 'Successfully fetched divisions', $divisions->items(),
+            ))->additional([
+                'pagination' => $divisions,
+            ])->response()->setStatusCode(200);
+            
         } catch (\Throwable $e) {
             return response(new DefaultResource(false, $e->getMessage(), []), 500);
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }
