@@ -148,12 +148,71 @@ const Navbar = () => {
       >
         <div className="px-8">
           <div className="flex flex-col gap-8 font-bold tracking-wider">
-            <a href="#" className="border-l-4 border-gray-600">
-              Features
-            </a>
-            <a href="#">Pricing</a>
-            <a href="#">Download</a>
-            <a href="#">Classic</a>
+            {token && (
+              <div className="flex flex-col gap-8 font-bold tracking-wider">
+                <a href="#">Task 1</a>
+                <NavLink
+                  to="/task2"
+                  className={({ isActive }) =>
+                    isActive ? "text-gray-700" : ""
+                  }
+                >
+                  Task 2
+                </NavLink>
+                <NavLink
+                  to="/task3"
+                  className={({ isActive }) =>
+                    isActive ? "text-gray-700" : ""
+                  }
+                >
+                  Task 3
+                </NavLink>
+                <NavLink
+                  to="/task4"
+                  className={({ isActive }) =>
+                    isActive ? "text-gray-700" : ""
+                  }
+                >
+                  Task 4
+                </NavLink>
+              </div>
+            )}
+            {/* logout */}
+            <div className="flex items-center gap-2">
+              <MoonIcon className="h-6 w-6" />
+              <SunIcon className="h-6 w-6" />
+              <div ref={dropdownRef}>
+                {token ? (
+                  <div className="relative">
+                    <div
+                      className="flex items-center gap-2 cursor-pointer"
+                      onClick={handleDropdownToggle}
+                    >
+                      <span>{user.name}</span>
+                      <ChevronDownIcon className="h-6 w-6" />
+                    </div>
+                    {dropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg transition-transform duration-300 ease-in-out transform">
+                        <ul>
+                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <Link to={`/user/${user.id}`}>Edit Profile</Link>
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="#" onClick={onLogout}>
+                              Logout
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button className="rounded-full border-solid border-2 border-gray-300 py-2 px-4 hover:bg-gray-700 hover:text-gray-100">
+                    Login
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
