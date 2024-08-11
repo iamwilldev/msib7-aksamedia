@@ -19,14 +19,6 @@ jobs:
     #     node-version: '22.5'
     #     cache: 'npm'
 
-    # check php version
-    - name: 🐘 Check PHP version
-      run: php -v
-
-        # composer install
-    - name: 📦 Install Composer
-      run: composer update
-
       # cp .env.example .env
     - name: 🛠 Copy .env
       run: cp .env.example .env
