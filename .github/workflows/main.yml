@@ -21,7 +21,7 @@ jobs:
 
         # composer install
     - name: 📦 Install Composer
-      run: composer install
+      run: composer update
 
       # cp .env.example .env
     - name: 🛠 Copy .env
