@@ -1,10 +1,15 @@
 import axios from "axios";
 
+const isDevelopment = false;
 const axiosClient1 = axios.create({
-  baseURL: "http://127.0.0.1:8000/api",
+  baseURL: isDevelopment
+    ? "http://127.0.0.1:8000/api"
+    : "https://aksamedia2.kai-dev.my.id/api",
 });
 const axiosClient2 = axios.create({
-  baseURL: "http://127.0.0.1:8001/api",
+  baseURL: isDevelopment
+    ? "http://127.0.0.1:8001/api"
+    : "https://aksamedia3.kai-dev.my.id/api",
 });
 
 const setupInterceptors = (axiosInstance) => {

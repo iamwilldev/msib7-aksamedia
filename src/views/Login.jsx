@@ -57,6 +57,15 @@ const Login = () => {
             </div>
           </form>
         </div>
+        <div className="mt-4 text-center">
+          <h1 className="text-2xl text-gray-700 mt-4">LOGIN INFORMATION:</h1>
+          <p>
+            <span className="font-bold">Username:</span> admin
+          </p>
+          <p>
+            <span className="font-bold">Password:</span> pastibisa
+          </p>
+        </div>
       </div>
     </div>
   );

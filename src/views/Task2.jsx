@@ -154,7 +154,7 @@ const Task2 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                  <code className="text-gray-700">{`POST http://127.0.0.1:8000/api/login`}</code>
+                  <code className="text-gray-700">{`POST ${axiosClient1.defaults.baseURL}/api/login`}</code>
                 </pre>
               </li>
               <li>
@@ -188,7 +188,7 @@ const Task2 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                  <code className="text-gray-700">{`GET http://127.0.0.1:8000/api/divisions`}</code>
+                  <code className="text-gray-700">{`GET ${axiosClient1.defaults.baseURL}/api/divisions`}</code>
                 </pre>
               </li>
               <li>
@@ -229,7 +229,7 @@ const Task2 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                  <code className="text-gray-700">{`GET http://127.0.0.1:8000/api/employees`}</code>
+                  <code className="text-gray-700">{`GET ${axiosClient1.defaults.baseURL}/api/employees`}</code>
                 </pre>
               </li>
               <li>
@@ -271,7 +271,7 @@ const Task2 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                  <code className="text-gray-700">{`POST http://127.0.0.1:8000/api/employees`}</code>
+                  <code className="text-gray-700">{`POST ${axiosClient1.defaults.baseURL}/api/employees`}</code>
                 </pre>
               </li>
               <li>
@@ -308,7 +308,7 @@ const Task2 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                  <code className="text-gray-700">{`PUT http://127.0.0.1:8000/api/employees/{uuid}`}</code>
+                  <code className="text-gray-700">{`PUT ${axiosClient1.defaults.baseURL}/api/employees/{uuid}`}</code>
                 </pre>
               </li>
               <li>
@@ -345,7 +345,7 @@ const Task2 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                  <code className="text-gray-700">{`DELETE http://127.0.0.1:8000/api/employees/{uuid}`}</code>
+                  <code className="text-gray-700">{`DELETE ${axiosClient1.defaults.baseURL}/api/employees/{uuid}`}</code>
                 </pre>
               </li>
               <li>
@@ -364,7 +364,7 @@ const Task2 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                  <code className="text-gray-700">{`GET http://127.0.0.1:8000/api/logout`}</code>
+                  <code className="text-gray-700">{`GET ${axiosClient1.defaults.baseURL}/api/logout`}</code>
                 </pre>
               </li>
               <li>

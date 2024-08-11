@@ -58,7 +58,7 @@ const Task4 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md">
-                  <code className="text-gray-700">{`GET http://127.0.0.1:8001/api/nilaiRT`}</code>
+                  <code className="text-gray-700">{`GET ${axiosClient2.defaults.baseURL}/nilaiRT`}</code>
                 </pre>
               </li>
               <li>
@@ -85,7 +85,7 @@ const Task4 = () => {
               <li>
                 <label htmlFor="">Acces API</label>
                 <pre className="bg-gray-100 p-2 rounded-md">
-                  <code className="text-gray-700">{`GET http://127.0.0.1:8001/api/nilaiST`}</code>
+                  <code className="text-gray-700">{`GET ${axiosClient2.defaults.baseURL}/api/nilaiST`}</code>
                 </pre>
               </li>
               <li>

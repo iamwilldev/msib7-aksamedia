@@ -1,0 +1,38 @@
+on:
+  push:
+    branches: [tugas3-fullstack]
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Auto Deploy
+    runs-on: ubuntu-latest
+    # strategy:
+    #   matrix:
+    #     node-version: [20.16, 21.7, 22.5]
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22.5
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.5"
+          cache: "npm"
+
+      - name: 🔨 Build Project
+        run: |
+          npm install
+          npm run build
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASS }}
+          protocol: ftps
+          port: ${{ secrets.FTP_PORT }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+          local-dir: ./dist/
