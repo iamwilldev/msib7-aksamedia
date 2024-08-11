@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\DefaultResource;
+use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
@@ -19,30 +20,24 @@ class EmployeeController extends Controller
         try {
             $query = Employee::query();
 
-            if ($request->has('name') || $request->has('division_id')) {
-                $query->whereLike('name', $request->name)->WhereLike('division_id', $request->division_id);
-            }
+            // if ($request->has('name') || $request->has('division_id')) {
+            //     $query->whereLike('name', $request->name)->WhereLike('division_id', $request->division_id);
+            // }
+
+            $query->when($request->name, function ($q) use ($request) {
+                return $q->where('name', 'like', "%$request->name%");
+            });
+
+            $query->when($request->division_id, function ($q) use ($request) {
+                return $q->where('division_id', $request->division_id);
+            });
 
             $employees = $query->select('id', 'image', 'name', 'phone', 'division_id', 'position')->paginate(2);
 
-            return (new DefaultResource(true, 'Successfully fetched employees', [
-                'employees' => $employees->map(function ($employee) {
-                    return [
-                        'id' => $employee->id,
-                        'image' => $employee->image,
-                        'name' => $employee->name,
-                        'phone' => $employee->phone,
-                        'division' => [
-                            'id' => $employee->division->id,
-                            'name' => $employee->division->name,
-                        ],
-                        'position' => $employee->position,
-                    ];
-                })->all(),
-            ],
-            ))->additional([
-                'pagination' => $employees->toArray(),
-            ])->response()->setStatusCode(200);
+            return response(new DefaultResource(true, 'Successfully fetched employees', [
+                    'employees' => EmployeeResource::collection($employees),
+                ], $employees
+            ), 200);
         } catch (\Throwable $e) {
             return response(new DefaultResource(false, $e->getMessage(), []), 500);
         }
@@ -58,7 +53,7 @@ class EmployeeController extends Controller
 
             $employee = Employee::create($data);
 
-            return response(new DefaultResource(true, 'Successfully created employee', []), 201);
+            return response(new DefaultResource(true, 'Successfully created employee', $employee), 201);
         } catch (\Throwable $e) {
             return response(new DefaultResource(false, $e->getMessage(), []), 500);
         }
@@ -67,9 +62,15 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Employee $employee)
     {
-        //
+        try {
+            return response(new DefaultResource(true, 'Successfully fetched employee', [
+                'employee' => new EmployeeResource($employee),
+            ]), 200);
+        } catch (\Throwable $e) {
+            return response(new DefaultResource(false, $e->getMessage(), []), 500);
+        }
     }
 
     /**
@@ -82,7 +83,9 @@ class EmployeeController extends Controller
 
             $employee->update($data);
 
-            return response(new DefaultResource(true, 'Successfully updated employee', []), 200);
+            return response(new DefaultResource(true, 'Successfully updated employee', [
+                'employee' => new EmployeeResource($employee),
+            ]), 200);
         } catch (\Throwable $e) {
             return response(new DefaultResource(false, $e->getMessage(), []), 500);
         }

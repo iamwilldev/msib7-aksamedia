@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class DefaultResource extends JsonResource
 {
-    public $status, $message, $resource;
+    public $status, $message, $resource, $pagination;
 
     /**
      * __construct
@@ -15,13 +15,16 @@ class DefaultResource extends JsonResource
      * @param  mixed  $status
      * @param  mixed  $message
      * @param  mixed  $resource
+     * @param  mixed  $pagination
      * @return void
      */
-    public function __construct($status, $message, $resource)
+    public function __construct($status, $message, $resource, $pagination = null)
     {
         parent::__construct($resource);
         $this->status = $status;
         $this->message = $message;
+        $this->resource = $resource;
+        $this->pagination = $pagination;
     }
 
     /**
@@ -31,10 +34,16 @@ class DefaultResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $response = [
             'success' => $this->status,
             'message' => $this->message,
             'data' => $this->resource,
         ];
+
+        if ($this->pagination) {
+            $response['pagination'] = $this->pagination->toArray();
+        }
+
+        return $response;
     }
 }

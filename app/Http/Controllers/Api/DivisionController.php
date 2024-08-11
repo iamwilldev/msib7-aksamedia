@@ -17,9 +17,9 @@ class DivisionController extends Controller
         try {
             $query = Division::query();
 
-            if ($request->has('name')) {
-                $query->whereLike('name', $request->name);
-            }
+            $query->when($request->name, function ($q) use ($request) {
+                return $q->where('name', 'like', "%$request->name%");
+            });
 
             $divisions = $query->select('id', 'name')->paginate(2);
 
