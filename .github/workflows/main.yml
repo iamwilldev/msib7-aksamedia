@@ -23,10 +23,6 @@ jobs:
     - name: 🛠 Copy .env
       run: cp .env.example .env
 
-      # key generate
-    - name: 🔑 Generate key
-      run: php artisan key:generate
-
       # migrate
     # - name: 🚀 Migrate & 🌱 Seed
     #   run: php artisan migrate:fresh --seed
