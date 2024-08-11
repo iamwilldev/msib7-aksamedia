@@ -1,15 +1,53 @@
-import React, { useState } from "react";
+import React, { Profiler, useEffect, useRef, useState } from "react";
 import {
   PaperAirplaneIcon,
   MoonIcon,
   SunIcon,
   Bars3Icon,
   XMarkIcon,
+  ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import { logo } from "../assets";
+import { useStateContext } from "../contexts/ContextProvider";
+import axios from "axios";
+import { axiosClient1 } from "../axiosClient";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
+  const { user, token, setUser, setToken } = useStateContext();
   const [toggleMenu, setToggleMenu] = useState(false);
+
+  const dropdownRef = useRef(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const handleDropdownToggle = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const onLogout = (ev) => {
+    ev.preventDefault();
+    axiosClient1.get("/logout").then(({}) => {
+      setUser(null);
+      setToken(null);
+    });
+  };
+
+  useEffect(() => {
+    if (token) {
+      axiosClient1.get("/users").then(({ data }) => {
+        setUser(data.data.users[0]);
+      });
+    }
+
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav>
@@ -25,12 +63,35 @@ const Navbar = () => {
                 <span>Aksamedia</span>
               </a>
             </div>
-            <div className="hidden lg:flex gap-8 ">
-              <a href="#">Tugas 1</a>
-              <a href="#">Tugas 2</a>
-              <a href="#">Tugas 3</a>
-              <a href="#">Tugas 4</a>
-            </div>
+            {token && (
+              <div className="hidden lg:flex gap-8 ">
+                <a href="#">Task 1</a>
+                <NavLink
+                  to="/task2"
+                  className={({ isActive }) =>
+                    isActive ? "text-gray-700" : ""
+                  }
+                >
+                  Task 2
+                </NavLink>
+                <NavLink
+                  to="/task3"
+                  className={({ isActive }) =>
+                    isActive ? "text-gray-700" : ""
+                  }
+                >
+                  Task 3
+                </NavLink>
+                <NavLink
+                  to="/task4"
+                  className={({ isActive }) =>
+                    isActive ? "text-gray-700" : ""
+                  }
+                >
+                  Task 4
+                </NavLink>
+              </div>
+            )}
           </div>
           <div className="flex gap-6">
             <div className="hidden xs:flex items-center gap-10">
@@ -38,10 +99,36 @@ const Navbar = () => {
                 <MoonIcon className="h-6 w-6" />
                 <SunIcon className="h-6 w-6" />
               </div>
-              <div>
-                <button className="rounded-full border-solid border-2 border-gray-300 py-2 px-4 hover:bg-gray-700 hover:text-gray-100">
-                  Login
-                </button>
+              <div ref={dropdownRef}>
+                {token ? (
+                  <div className="relative">
+                    <div
+                      className="flex items-center gap-2 cursor-pointer"
+                      onClick={handleDropdownToggle}
+                    >
+                      <span>{user.name}</span>
+                      <ChevronDownIcon className="h-6 w-6" />
+                    </div>
+                    {dropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg transition-transform duration-300 ease-in-out transform">
+                        <ul>
+                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <Link to={`/user/${user.id}`}>Edit Profile</Link>
+                          </li>
+                          <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <a href="#" onClick={onLogout}>
+                              Logout
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button className="rounded-full border-solid border-2 border-gray-300 py-2 px-4 hover:bg-gray-700 hover:text-gray-100">
+                    Login
+                  </button>
+                )}
               </div>
             </div>
             {/* Mobile navigation toggle */}

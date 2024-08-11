@@ -12,3 +12,65 @@ a:hover {
   @apply transition duration-200;
   @apply text-gray-700
 }
+
+table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+table>thead>tr>th {
+  text-align: left;
+  padding: 0.5rem 0.5rem;
+  background-color: #efefef;
+}
+
+table>tbody>tr>td {
+  padding: 0.5rem 0.5rem;
+  border-bottom: 1px solid #efefef;
+  white-space: nowrap;
+}
+
+.card {
+  background-color: #FFF;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+ol {
+  list-style-type: none;
+  counter-reset: list;
+}
+
+ol>li {
+  counter-increment: list;
+}
+
+ol>li::before {
+  content: counter(list) ".";
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+ul.ml-10 {
+  list-style-type: none;
+}
+
+ul.ml-10>li {
+  position: relative;
+}
+
+ul.ml-10>li::before {
+  content: "";
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #333;
+  border-radius: 50%;
+  /* margin-right: 0.5rem; */
+  left: -1rem;
+  top: 0.5rem;
+}
