@@ -1,40 +1,52 @@
+name: Laravel
+
 on:
   push:
-    branches: [ tugas4-bonus ]
-name: 🚀 Deploy website on push
+    branches: [ "tugas4-bonus" ]
+  pull_request:
+    branches: [ "tugas4-bonus" ]
+
 jobs:
-  web-deploy:
-    name: 🎉 Auto Deploy
+  laravel-tests:
+
     runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     node-version: [20.16, 21.7, 22.5]
+
     steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v4
-
-    # - name: Use Node.js 22.5
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: '22.5'
-    #     cache: 'npm'
-
-      # cp .env.example .env
-    - name: 🛠 Copy .env
-      run: cp .env.example .env
-
-      # migrate
-    # - name: 🚀 Migrate & 🌱 Seed
-    #   run: php artisan migrate:fresh --seed
-
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME3 }}
-        password: ${{ secrets.FTP_PASS }}
-        protocol: ftps
-        port: ${{ secrets.FTP_PORT }}
-        exclude: |
-          **/.git*
-          **/.git*/**
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.2'
+      - uses: actions/checkout@v4
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Dependencies
+        run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Generate key
+        run: php artisan key:generate
+      #- name: Set environment variables in .env
+      #  run: |
+      #    sed -i 's/^DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}/' .env || echo "DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}" >> .env
+      #    sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USER }}/' .env || echo "DB_USERNAME=${{ secrets.DB_USER }}" >> .env
+      #    sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env || echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+      #- name: Migration
+      #  run: php artisan migrate:fresh --seed
+      #- name: Optimize
+      #  run: php artisan optimize:clear
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+      - name: Deploy to Server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME2 }}
+          password: ${{ secrets.FTP_PASS }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.env*
+            **/.env.example*
+            **/.github*
+            **/.github*/**
+            **/.gitignore*
+            **/.gitattributes*
+            **/.editorconfig*
+            **/.main.yml*
