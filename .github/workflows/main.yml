@@ -22,15 +22,15 @@ jobs:
         run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Generate key
         run: php artisan key:generate
-      - name: Set environment variables in .env
-        run: |
-          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}/' .env || echo "DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}" >> .env
-          sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USER }}/' .env || echo "DB_USERNAME=${{ secrets.DB_USER }}" >> .env
-          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env || echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-      - name: Migration
-        run: php artisan migrate:fresh --seed
-      - name: Optimize
-        run: php artisan optimize:clear
+      #- name: Set environment variables in .env
+      #  run: |
+      #    sed -i 's/^DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}/' .env || echo "DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}" >> .env
+      #    sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USER }}/' .env || echo "DB_USERNAME=${{ secrets.DB_USER }}" >> .env
+      #    sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env || echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+      #- name: Migration
+      #  run: php artisan migrate:fresh --seed
+      #- name: Optimize
+      #  run: php artisan optimize:clear
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Deploy to Server
