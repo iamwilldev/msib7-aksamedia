@@ -21,11 +21,19 @@ jobs:
     #   run: php artisan migrate:fresh --seed
 
       - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        uses: sand4rt/ftp-deployer@v1.8
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASS }}
-          exclude: |
-            **/.git*
-            **/.git*/**
+          passive: true
+
+#- name: 📂 Sync files
+#uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+#with:
+#server: ${{ secrets.FTP_SERVER }}
+#username: ${{ secrets.FTP_USERNAME }}
+#password: ${{ secrets.FTP_PASS }}
+#exclude: |
+#**/.git*
+#**/.git*/**
