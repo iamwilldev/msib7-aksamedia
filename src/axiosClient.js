@@ -6,6 +6,7 @@ const axiosClient1 = axios.create({
     ? "http://127.0.0.1:8000/api"
     : "https://msib7aksamediabackend.kai-dev.my.id/api",
 });
+
 const axiosClient2 = axios.create({
   baseURL: isDevelopment
     ? "http://127.0.0.1:8001/api"
