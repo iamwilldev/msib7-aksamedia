@@ -1,14 +1,15 @@
+name: Laravel
+
 on:
   push:
-    branches: [tugas3-fullstack]
-name: 🚀 Deploy website on push
+    branches: [ "tugas3-fullstack" ]
+  pull_request:
+    branches: [ "tugas3-fullstack" ]
+
 jobs:
-  web-deploy:
-    name: 🎉 Auto Deploy
+  laravel-tests:
+
     runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     node-version: [20.16, 21.7, 22.5]
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
@@ -30,8 +31,6 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASS }}
-          protocol: ftps
-          port: ${{ secrets.FTP_PORT }}
           exclude: |
             **/.git*
             **/.git*/**
