@@ -6,9 +6,9 @@ jobs:
   web-deploy:
     name: 🎉 Auto Deploy
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.16, 21.7, 22.5]
+    # strategy:
+    #   matrix:
+    #     node-version: [20.16, 21.7, 22.5]
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
