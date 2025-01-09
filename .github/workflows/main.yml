@@ -28,7 +28,7 @@ jobs:
           sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/' .env || echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
           sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env || echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
       - name: Migration
-        run: php artisan migrate --seed
+        run: php artisan migrate:fresh --seed
       - name: Optimize
         run: php artisan optimize:clear
       - name: Directory Permissions
