@@ -1,40 +1,57 @@
+name: Laravel
+
 on:
   push:
-    branches: [ tugas2-backend ]
-name: 🚀 Deploy website on push
+    branches: [ "tugas2-backend" ]
+  pull_request:
+    branches: [ "tugas2-backend" ]
 
 jobs:
-  web-deploy:
-    name: 🎉 Deploy
+  laravel-tests:
+
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.3
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}
+          MYSQL_USER: ${{ secrets.DB_USER }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping --password=root_password" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
-      - name: 🚚 Get latest code
-        uses: actions/checkout@v4
-
-      - name: 🔨 Build Project
-        run: |
-          composer install
-          cp .env.example .env
-
-      # migrate
-    # - name: 🚀 Migrate & 🌱 Seed
-    #   run: php artisan migrate:fresh --seed
-
-      - name: 📂 Sync files
-        uses: sand4rt/ftp-deployer@v1.8
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
-          host: ${{ secrets.FTP_SERVER }}
+          php-version: '8.0'
+      - uses: actions/checkout@v4
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Optimize
+        run: php artisan optimize:clear
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+      - name: Deploy to Server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASS }}
-          local_folder: ./
-          passive: true
-
-#- name: 📂 Sync files
-#uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-#with:
-#server: ${{ secrets.FTP_SERVER }}
-#username: ${{ secrets.FTP_USERNAME }}
-#password: ${{ secrets.FTP_PASS }}
-#exclude: |
-#**/.git*
-#**/.git*/**
+          password: ${{ secrets.FTP_PASSWORD }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.env
+            **/.env.example
+            **/.github
+            **/.github/**
+            **/.gitignore
+            **/.gitattributes
+            **/.editorconfig
+            **/.main.yml
