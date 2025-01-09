@@ -7,22 +7,13 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
-    # strategy:
-    #   matrix:
-    #     node-version: [20.16, 21.7, 22.5]
     steps:
       - name: 🚚 Get latest code
-        uses: actions/checkout@master
-
-      - name: Use Node.js 20.10.0
-        uses: actions/setup-node@v2
-        with:
-          node-version: "20.10.0"
+        uses: actions/checkout@v4
 
       - name: 🔨 Build Project
         run: |
-          npm install
-          npm run build
+          composer install
           cp .env.example .env
 
       # migrate
@@ -30,17 +21,11 @@ jobs:
     #   run: php artisan migrate:fresh --seed
 
       - name: 📂 Sync files
-        uses: SamKirkland/FTP-Deploy-Action@3.0.0
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          ftp-username: ${{ secrets.FTP_USERNAME }}
-          ftp-server: ${{ secrets.FTP_SERVER }}
-          ftp-password: ${{ secrets.FTP_PASS }}
-
-          #server: ${{ secrets.FTP_SERVER }}
-          #username: ${{ secrets.FTP_USERNAME }}
-          #password: ${{ secrets.FTP_PASS }}
-          #protocol: ftps
-          #port: ${{ secrets.FTP_PORT }}
-          #exclude: |
-           # **/.git*
-            #**/.git*/**
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASS }}
+          exclude: |
+            **/.git*
+            **/.git*/**
