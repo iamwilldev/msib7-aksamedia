@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const isDevelopment = true;
+const isDevelopment = false;
 const axiosClient1 = axios.create({
   baseURL: isDevelopment
     ? "http://127.0.0.1:8000/api"
