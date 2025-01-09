@@ -26,6 +26,7 @@ jobs:
           host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASS }}
+          local_folder: ./
           passive: true
 
 #- name: 📂 Sync files
