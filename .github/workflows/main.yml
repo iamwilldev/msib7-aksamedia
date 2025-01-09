@@ -25,7 +25,7 @@ jobs:
       - name: Set environment variables in .env
         run: |
           sed -i 's/^DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}/' .env || echo "DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}" >> .env
-          sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/' .env || echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USER }}/' .env || echo "DB_USERNAME=${{ secrets.DB_USER }}" >> .env
           sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env || echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
       - name: Migration
         run: php artisan migrate:fresh --seed
