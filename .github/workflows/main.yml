@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@master
-        
+
       - name: Use Node.js 20.10.0
         uses: actions/setup-node@v2
         with:
@@ -32,11 +32,15 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@3.0.0
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASS }}
-          protocol: ftps
-          port: ${{ secrets.FTP_PORT }}
-          exclude: |
-            **/.git*
-            **/.git*/**
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-server: ${{ secrets.FTP_SERVER }}
+          ftp-password: ${{ secrets.FTP_PASS }}
+
+          #server: ${{ secrets.FTP_SERVER }}
+          #username: ${{ secrets.FTP_USERNAME }}
+          #password: ${{ secrets.FTP_PASS }}
+          #protocol: ftps
+          #port: ${{ secrets.FTP_PORT }}
+          #exclude: |
+           # **/.git*
+            #**/.git*/**
