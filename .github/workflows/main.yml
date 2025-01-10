@@ -1,52 +1,34 @@
-name: Laravel
-
+name: 🚀 Deploy
 on:
   push:
     branches: [ "tugas4-bonus" ]
-  pull_request:
-    branches: [ "tugas4-bonus" ]
-
 jobs:
-  laravel-tests:
-
+  deploy-cpanel:
+    name: 🚀 Deploy to CPanel
     runs-on: ubuntu-latest
-
     steps:
-      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      - name: 🚚 Get Latest Code
+      - uses: actions/checkout@v4.1.2
+
+      - name: ⚙️ Use PHP 8.2
+        uses: shivammathur/setup-php@main
         with:
-          php-version: '8.2'
-      - uses: actions/checkout@v4
-      - name: Copy .env
+          php-version: "8.2"
+
+      - name: ⚙️ Use NodeJS 20
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: "20"
+
+      - name: 🔨 Install Dependencies PHP
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: 🗄️ Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-      - name: Install Dependencies
-        run: composer update -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Generate key
-        run: php artisan key:generate
-      #- name: Set environment variables in .env
-      #  run: |
-      #    sed -i 's/^DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}/' .env || echo "DB_DATABASE=${{ secrets.DB_DATABASE_TUGAS2_BACKEND }}" >> .env
-      #    sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USER }}/' .env || echo "DB_USERNAME=${{ secrets.DB_USER }}" >> .env
-      #    sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env || echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-      #- name: Migration
-      #  run: php artisan migrate:fresh --seed
-      #- name: Optimize
-      #  run: php artisan optimize:clear
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
-      - name: Deploy to Server
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME2 }}
-          password: ${{ secrets.FTP_PASS }}
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.env*
-            **/.env.example*
-            **/.github*
-            **/.github*/**
-            **/.gitignore*
-            **/.gitattributes*
-            **/.editorconfig*
-            **/.main.yml*
+
+      - name: 🚀 Deploy to CPanel
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME2 }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASS }}
+        run: npm run deploy
